@@ -7,6 +7,7 @@ import Hero from '../components/Hero'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
+import 'regenerator-runtime/runtime'
 
 const Trending = () => {
     const [page, setPage] = useState(1)

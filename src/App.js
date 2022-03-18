@@ -5,12 +5,12 @@ import {
   Route,
   useLocation,
 } from 'react-router-dom'
-import './App.css'
+
 import Add from './pages/Add'
 import Header from './components/Header'
 import Watched from './pages/Watched'
 import Watchlist from './pages/Watchlist'
-import './lib/font-awesome/css/all.min.css'
+
 import { GlobalProvider } from './context/globalStat'
 import Trending from './pages/Trending'
 import Series from './pages/Series'

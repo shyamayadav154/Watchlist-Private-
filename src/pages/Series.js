@@ -31,7 +31,7 @@ const Series = () => {
      },[page])
     
 
-     if (loading) return <Loader />
+    
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -44,12 +44,16 @@ const Series = () => {
           <div className='header'>
             <h1 className='heading'>Popular Series</h1>
           </div>
-          <div className='movie-grid'>
-            {content.length > 0 &&
-              content.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} type='tv' />
-              ))}
-          </div>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className='movie-grid'>
+              {content.length > 0 &&
+                content.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} type='movie' />
+                ))}
+            </div>
+          )}
           <CustomPagination setPage={setPage} page={page} />
         </div>
       </div>

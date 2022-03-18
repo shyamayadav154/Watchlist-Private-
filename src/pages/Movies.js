@@ -5,6 +5,8 @@ import MovieCard from '../components/MovieCard'
 import { useGlobalContext } from '../context/globalStat'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
+import 'regenerator-runtime/runtime'
+
 
 const Movies = () => {
  const [page, setPage] = useState(1)

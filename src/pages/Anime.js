@@ -28,7 +28,6 @@ const Anime = () => {
     window.scroll(0, 0)
  }, [page])
 
- if (loading) return <Loader />
  return (
    <motion.div
      initial={{ opacity: 0 }}
@@ -41,14 +40,18 @@ const Anime = () => {
          <div className='header'>
            <h1 className='heading'>Popular Anime</h1>
          </div>
-      
+
+         {loading ? (
+           <Loader />
+         ) : (
            <div className='movie-grid'>
-             { content.length>0 &&  content.map((movie) => (
-               <MovieCard key={movie.id} movie={movie} type='tv' />
-             ))}
+             {content.length > 0 &&
+               content.map((movie) => (
+                 <MovieCard key={movie.id} movie={movie} type='movie' />
+               ))}
            </div>
-       
-      
+         )}
+
          <CustomPagination setPage={setPage} page={page} />
        </div>
      </div>

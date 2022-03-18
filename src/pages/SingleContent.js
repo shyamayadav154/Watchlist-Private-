@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SingleContentLoader from '../components/singleContentLoader'
 import { useGlobalContext } from '../context/globalStat'
@@ -6,73 +6,70 @@ import { motion } from 'framer-motion'
 const img500 = 'https://image.tmdb.org/t/p/w500/'
 
 const SingleContent = () => {
-    const par = useParams()
-    
-    const [type, setType] = useState(par.type)
-    const [id, setId] = useState(par.id)
+  const par = useParams()
 
-    const [casts, setCasts] = useState([])
+  const [type, setType] = useState(par.type)
+  const [id, setId] = useState(par.id)
 
-  const [video, setVideo] = useState([])
+  const [casts, setCasts] = useState([])
+
   const [videoLink, setVideoLink] = useState('')
-    const {loading,setLoading,content,setContent} = useGlobalContext()
-   
-        const fetchData = async() =>{
-          setLoading(true)
-                const res = await fetch(
-                  `https://api.themoviedb.org/3/${type}/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
-                )
-                const data = await res.json()
-                    console.log(data,'content');
-                    setContent(data)
-                    setTimeout(() => {
-                      setLoading(false)
-                    }, 500);
-                    
-                  
-        }
+  const { loading, setLoading, content, setContent } = useGlobalContext()
 
-        const fetchCast = async () =>{
-            const res = await fetch(
-              `https://api.themoviedb.org/3/${type}/${id}/credits?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
-            )
-            const data = await res.json()
+  const fetchData = async () => {
+    setLoading(true)
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+    )
+    const data = await res.json()
+    console.log(data, 'content')
+    setContent(data)
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
+  }
 
-           
-            console.log(data);
-                setCasts(data.cast)
-                
-        }
+  const fetchCast = async () => {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}/credits?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+    )
+    const data = await res.json()
 
-        const fetchVideo = async() =>{
-          const res = await fetch(
-            `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+    console.log(data)
+    setCasts(data.cast)
+  }
+
+  const fetchVideo = async () => {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+    )
+    const data = await res.json()
+    if (data) {
+      setVideoLink(() => {
+        const trailer = data?.results?.filter((result) => {
+          return (
+            result.name.toUpperCase().includes('TRAILER') ||
+            result.type.toUpperCase().includes('TRAILER')
           )
-          const data = await res.json()
-          const trailer = data.results.filter((result)=>{
-            return result.name.toUpperCase().includes('TRAILER') || result.type.toUpperCase().includes('TRAILER')
-          })
-          setVideo(trailer[0]?.key)
-          if(trailer[0]?.site === 'Vimeo'){
-              setVideoLink(`https://vimeo.com/${trailer[0]?.key}`)
-          }else{
-              setVideoLink(`https://www.youtube.com/watch?v=${trailer[0]?.key}`)
-          }
-          
+        })
+
+        if (trailer?.[0]?.site === 'Vimeo') {
+          return `https://vimeo.com/${trailer?.[0]?.key}`
+        } else {
+          return `https://www.youtube.com/watch?v=${trailer?.[0]?.key}`
         }
+      })
+    }
+  }
 
-        useEffect(()=>{
-            fetchData()
-            fetchCast()
-            fetchVideo()
-          
-        },[id])
-        
+  useEffect(() => {
+    fetchData()
+    fetchCast()
+    fetchVideo()
+  }, [id])
 
-        if(loading) return <SingleContentLoader/>
+  if (loading) return <SingleContentLoader />
 
-        
-            
   return (
     <motion.div
       initial={{ opacity: 1 }}
@@ -131,7 +128,7 @@ const SingleContent = () => {
             <div className='casts'>
               <h2>Casts:</h2>
               <ul>
-                {casts.map((cast, index) => {
+                {casts?.map((cast, index) => {
                   if (index < 20)
                     return (
                       <li key={cast.id}>
